@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScentElite | Luxury Perfumes</title>
+    
+    <!-- Premium Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root {
+            --primary: #d4af37; /* Gold color for Perfume theme */
+            --dark: #000000;
+            --gray-light: #f4f4f4;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #ffffff; color: var(--dark); overflow-x: hidden; }
+        h1, h2, .logo-text { font-family: 'Playfair Display', serif; }
+
+        /* --- TOP MARQUEE --- */
+        .marquee-bar {
+            background: var(--primary);
+            color: black;
+            padding: 8px 0;
+            font-size: 0.85rem;
+            font-weight: 700;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+        .marquee-content {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 20s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+
+        /* --- HEADER --- */
+        .header-elite { background: var(--dark); padding: 15px 0; position: sticky; top: 0; z-index: 1080; border-bottom: 1px solid #222; }
+        .nav-grid { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
+        
+        .hamburger { color: white; font-size: 1.4rem; cursor: pointer; justify-self: start; }
+        .logo-box { text-align: center; }
+        .logo-img { height: 50px; max-width: 180px; object-fit: contain; }
+        .logo-text { color: white; font-weight: 700; font-size: 1.8rem; letter-spacing: 1px; text-decoration: none; }
+        .logo-text span { color: var(--primary); }
+
+        .nav-icons { display: flex; justify-content: flex-end; gap: 20px; color: white; align-items: center; }
+        .icon-btn { cursor: pointer; transition: var(--transition); position: relative; }
+        .icon-btn:hover { color: var(--primary); }
+        .cart-dot { position: absolute; top: -8px; right: -10px; background: var(--primary); color: #000; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 50px; }
+
+        /* --- SIDEBAR --- */
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; display: none; backdrop-filter: blur(4px); }
+        .sidebar { position: fixed; top: 0; left: -320px; width: 300px; height: 100%; background: white; z-index: 2001; transition: var(--transition); padding: 40px 25px; }
+        .sidebar.active { left: 0; }
+        .side-link { display: block; padding: 15px 0; color: var(--dark); text-decoration: none; font-weight: 700; border-bottom: 1px solid #eee; }
+
+        /* --- HERO SLIDER --- */
+        .hero-wrap { margin: 20px 0; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .carousel-item { height: 500px; }
+        .carousel-item img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.9); }
+
+        /* --- CATEGORIES --- */
+        .cat-scroll { display: flex; overflow-x: auto; gap: 25px; padding: 25px 0; scrollbar-width: none; }
+        .cat-card { min-width: 90px; text-align: center; cursor: pointer; }
+        .cat-icon { width: 70px; height: 70px; background: #f9f9f9; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 10px; border: 1px solid #eee; transition: var(--transition); }
+        .cat-card:hover .cat-icon { background: var(--dark); color: var(--primary); transform: scale(1.1); }
+        .cat-card p { font-size: 0.8rem; font-weight: 700; color: #333; text-transform: uppercase; }
+
+        /* --- PRODUCTS --- */
+        .product-card { border-radius: 15px; border: 1px solid #f0f0f0; transition: var(--transition); height: 100%; overflow: hidden; background: #fff; }
+        .product-card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.08); }
+        .img-container { aspect-ratio: 1/1; background: #fff; padding: 15px; display: flex; align-items: center; justify-content: center; }
+        .img-container img { max-width: 100%; max-height: 100%; transition: 0.6s; object-fit: contain; }
+        .product-card:hover .img-container img { transform: scale(1.05); }
+        
+        .price-text { font-size: 1.1rem; font-weight: 800; color: var(--dark); }
+        .buy-btn { background: var(--dark); color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; font-weight: 700; margin-top: 15px; transition: 0.3s; font-size: 0.9rem; }
+        .buy-btn:hover { background: var(--primary); color: #000; }
+
+        /* --- UI ELEMENTS --- */
+        #eliteToast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: #000; color: #fff; padding: 14px 30px; border-radius: 50px; z-index: 9999; transition: 0.5s; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); font-weight: 600; }
+        #eliteToast.show { top: 30px; }
+        .page-section { display: none; min-height: 70vh; }
+        .active-page { display: block; animation: fadeIn 0.6s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* --- FOOTER --- */
+        .footer-elite { background: var(--dark); color: white; padding: 60px 0 20px; margin-top: 50px; }
+        .f-link { color: rgba(255,255,255,0.7); text-decoration: none; display: block; margin-bottom: 10px; transition: 0.3s; }
+        .f-link:hover { color: var(--primary); padding-left: 5px; }
+
+        @media (max-width: 768px) {
+            .carousel-item { height: 250px; }
+            .logo-text { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Marquee Bar -->
+    <div class="marquee-bar">
+        <div class="marquee-content" id="marquee-text">
+            WELCOME TO  a&h.luxora - LUXURY FRAGRANCE DESTINATION • FREE DELIVERY ON ALL ORDERS • SHOP NOW
+        </div>
+    </div>
+
+    <!-- Elite Toast -->
+    <div id="eliteToast">
+        <i class="fa-solid fa-circle-check text-warning"></i>
+        <span id="toastMsg">Action Successful!</span>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="eliteSidebar">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h4 class="fw-800 m-0">MENU</h4>
+            <i class="fa-solid fa-xmark fs-4 cursor-pointer" onclick="toggleSidebar()"></i>
+        </div>
+        <a href="#" class="side-link" onclick="switchPage('home')">COLLECTIONS</a>
+        <a href="#" class="side-link" onclick="switchPage('cart')">MY BAG</a>
+        <a href="#" class="side-link" onclick="handleProfileNav()">TRACK ORDER</a>
+        <div class="mt-5">
+            <button class="btn btn-dark w-100 py-3 rounded-pill fw-800" onclick="logoutUser()">LOGOUT</button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header-elite">
+        <div class="container">
+            <div class="nav-grid">
+                <div class="hamburger" onclick="toggleSidebar()">
+                    <i class="fa-solid fa-bars-staggered"></i>
+                </div>
+                <div class="logo-box">
+                    <a href="#" onclick="switchPage('home')" id="dynamic-logo">
+                        <span class="logo-text">a&h<span>luxora</span></span>
+                    </a>
+                </div>
+                <div class="nav-icons">
+                    <div class="icon-btn" onclick="switchPage('cart')">
+                        <i class="fa-solid fa-bag-shopping fs-5"></i>
+                        <span class="cart-dot" id="cart-count">0</span>
+                    </div>
+                    <div class="icon-btn" onclick="handleProfileNav()">
+                        <i class="fa-solid fa-user fs-5"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- HOME PAGE -->
+        <section id="home-page" class="page-section active-page">
+            <div id="heroSlider" class="carousel slide hero-wrap" data-bs-ride="carousel">
+                <div class="carousel-indicators" id="slider-indicators"></div>
+                <div class="carousel-inner" id="slider-inner">
+                    <div class="carousel-item active">
+                        <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=1400&q=80">
+                    </div>
+                </div>
+            </div>
+
+            <div class="cat-scroll">
+                <div class="cat-card" onclick="filterBy('Men')"><div class="cat-icon"><i class="fa-solid fa-bottle-droplet"></i></div><p>Men</p></div>
+                <div class="cat-card" onclick="filterBy('Women')"><div class="cat-icon"><i class="fa-solid fa-spa"></i></div><p>Women</p></div>
+                <div class="cat-card" onclick="filterBy('Unisex')"><div class="cat-icon"><i class="fa-solid fa-venus-mars"></i></div><p>Unisex</p></div>
+                <div class="cat-card" onclick="filterBy('Oudh')"><div class="cat-icon"><i class="fa-solid fa-gem"></i></div><p>Premium Oudh</p></div>
+                <div class="cat-card" onclick="filterBy('Luxury')"><div class="cat-icon"><i class="fa-solid fa-crown"></i></div><p>Luxury Set</p></div>
+            </div>
+
+            <h2 class="fw-800 mb-4 mt-2" id="grid-title">OUR SIGNATURE SCENTS</h2>
+            <div class="row g-4 mb-5" id="product-grid">
+                <div class="col-12 text-center py-5"><div class="spinner-border text-warning"></div></div>
+            </div>
+        </section>
+
+        <!-- CART PAGE -->
+        <section id="cart-page" class="page-section">
+            <div class="py-5">
+                <h1 class="mb-5">SHOPPING BAG</h1>
+                <div class="row g-5">
+                    <div class="col-lg-8" id="cart-items"></div>
+                    <div class="col-lg-4">
+                        <div class="card border-0 shadow-sm p-4 rounded-4">
+                            <h5 class="fw-800 mb-4">ORDER SUMMARY</h5>
+                            <div class="d-flex justify-content-between mb-4 fs-4 fw-800"><span>TOTAL</span><span id="gtotal">0</span></div>
+                            <button class="btn btn-dark w-100 py-3 rounded-pill" onclick="checkOut()">PROCEED TO CHECKOUT</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROFILE/ORDERS PAGE -->
+        <section id="profile-page" class="page-section">
+            <div class="py-5">
+                <h1 class="mb-5">MY ORDERS</h1>
+                <div id="tracking-list" class="row g-4"></div>
+            </div>
+        </section>
+
+        <!-- AUTH PAGE -->
+        <section id="auth-page" class="page-section">
+            <div class="py-5 d-flex justify-content-center">
+                <div class="card border-0 shadow-lg p-5 rounded-4 w-100" style="max-width: 420px;">
+                    <div id="login-box">
+                        <h2 class="mb-4">SIGN IN</h2>
+                        <input type="email" id="l-email" class="form-control mb-3 py-3" placeholder="Email">
+                        <input type="password" id="l-pass" class="form-control mb-4 py-3" placeholder="Password">
+                        <button class="btn btn-dark w-100 py-3 rounded-pill" onclick="loginUser()">LOGIN</button>
+                        <p class="text-center mt-4 mb-0">NEW USER? <a href="#" onclick="toggleAuth(false)" class="text-warning">CREATE ACCOUNT</a></p>
+                    </div>
+                    <div id="signup-box" style="display:none;">
+                        <h2 class="mb-4">REGISTER</h2>
+                        <input type="text" id="r-name" class="form-control mb-3 py-3" placeholder="Full Name">
+                        <input type="email" id="r-email" class="form-control mb-3 py-3" placeholder="Email">
+                        <input type="password" id="r-pass" class="form-control mb-4 py-3" placeholder="Password">
+                        <button class="btn btn-dark w-100 py-3 rounded-pill" onclick="signupUser()">REGISTER</button>
+                        <p class="text-center mt-4 mb-0">HAVE ACCOUNT? <a href="#" onclick="toggleAuth(true)" class="text-warning">SIGN IN</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-elite">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-4">
+                    <h3 id="f-name">SCENTELITE</h3>
+                    <p class="opacity-75" id="f-bio">Pure luxury captured in bottles. We deliver authentic fragrances crafted for the elite.</p>
+                </div>
+                <div class="col-lg-4">
+                    <h5>CONTACT</h5>
+                    <p class="opacity-75" id="f-num">WhatsApp Support: +00 00000000</p>
+                </div>
+                <div class="col-lg-4">
+                    <h5>FOLLOW US</h5>
+                    <div class="d-flex gap-3 fs-4">
+                        <a href="#" class="text-white"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fa-brands fa-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-5 opacity-25">
+            <p class="text-center opacity-50 small mb-0">© 2025 ScentElite Fragrances. Premium Quality.</p>
+        </div>
+    </footer>
+
+    <!-- Checkout Modal -->
+    <div class="modal fade" id="coModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0">
+                <div class="modal-body p-4">
+                    <h3 class="mb-4">SHIPPING DETAILS</h3>
+                    <input type="text" id="co-name" class="form-control mb-2" placeholder="Full Name">
+                    <input type="tel" id="co-phone" class="form-control mb-2" placeholder="WhatsApp Number">
+                    <textarea id="co-addr" class="form-control mb-3" placeholder="Complete Address"></textarea>
+                    
+                    <h6 class="fw-800 mb-2">PAYMENT</h6>
+                    <div class="list-group mb-4">
+                        <label class="list-group-item d-flex gap-2">
+                            <input type="radio" name="pm" value="COD" checked> <span>Cash on Delivery</span>
+                        </label>
+                    </div>
+                    <button class="btn btn-dark w-100 py-3 rounded-pill" onclick="submitOrder()">PLACE ORDER</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FIREBASE & SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue, set, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // Your updated Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyCQzbT_p5ffQfLkTGUoI4xiI8fuuUTtYSY",
+            authDomain: "hasnainnetwork-45552.firebaseapp.com",
+            databaseURL: "https://hasnainnetwork-45552-default-rtdb.firebaseio.com",
+            projectId: "hasnainnetwork-45552",
+            storageBucket: "hasnainnetwork-45552.firebasestorage.app",
+            messagingSenderId: "202770819393",
+            appId: "1:202770819393:web:727f50bdc21960f52419c0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        let products = [];
+        let cart = JSON.parse(localStorage.getItem('p_cart')) || [];
+        let user = JSON.parse(localStorage.getItem('p_user')) || null;
+        let currency = 'Rs.';
+
+        window.showToast = (msg) => {
+            const t = document.getElementById('eliteToast');
+            document.getElementById('toastMsg').innerText = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        };
+
+        window.switchPage = (id) => {
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active-page'));
+            document.getElementById(`${id}-page`).classList.add('active-page');
+            window.scrollTo(0,0);
+            if(id === 'cart') renderCart();
+            if(id === 'profile') trackOrders();
+            toggleSidebar(false);
+        };
+
+        window.toggleSidebar = (st) => {
+            const s = document.getElementById('eliteSidebar');
+            const o = document.querySelector('.sidebar-overlay');
+            if(st === false) { s.classList.remove('active'); o.style.display='none'; return; }
+            s.classList.toggle('active');
+            o.style.display = s.classList.contains('active') ? 'block' : 'none';
+        };
+
+        // ADMIN SETTINGS SYNC (Logo, Banners, Marquee)
+        onValue(ref(db, 'settings'), (snap) => {
+            const s = snap.val() || {};
+            currency = s.currency || 'Rs.';
+            document.getElementById('marquee-text').innerText = s.marqueeText || "WELCOME TO SCENT ELITE - LUXURY FRAGRANCES • FREE DELIVERY • SHOP NOW";
+            document.getElementById('f-name').innerText = s.storeName || 'SCENTELITE';
+            document.getElementById('f-bio').innerText = s.storeBio || '';
+            document.getElementById('f-num').innerText = "WhatsApp Support: " + (s.whatsapp || '');
+
+            const logoCon = document.getElementById('dynamic-logo');
+            if(s.logoUrl) logoCon.innerHTML = `<img src="${s.logoUrl}" class="logo-img">`;
+            else logoCon.innerHTML = `<span class="logo-text">${s.storeName || 'SCENTELITE'}</span>`;
+
+            if(s.posters) {
+                const inner = document.getElementById('slider-inner');
+                const ind = document.getElementById('slider-indicators');
+                inner.innerHTML = ''; ind.innerHTML = '';
+                Object.entries(s.posters).forEach(([id, p], i) => {
+                    inner.innerHTML += `<div class="carousel-item ${i===0?'active':''}"><img src="${p.url}"></div>`;
+                    ind.innerHTML += `<button type="button" data-bs-target="#heroSlider" data-bs-slide-to="${i}" class="${i===0?'active':''}"></button>`;
+                });
+            }
+        });
+
+        // PRODUCTS SYNC
+        onValue(ref(db, 'products'), (snap) => {
+            const d = snap.val();
+            products = d ? Object.entries(d) : [];
+            renderGrid(products);
+        });
+
+        function renderGrid(items) {
+            const g = document.getElementById('product-grid');
+            g.innerHTML = items.length ? '' : '<p class="text-center py-5">No Fragrances Found</p>';
+            items.forEach(([id, p]) => {
+                g.innerHTML += `
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="product-card">
+                        <div class="img-container"><img src="${p.image}"></div>
+                        <div class="p-3">
+                            <h6 class="fw-800 text-truncate mb-1">${p.title}</h6>
+                            <p class="small text-muted mb-2">${p.category || 'Luxury'}</p>
+                            <div class="price-text">${currency} ${p.price}</div>
+                            <button class="buy-btn" onclick="addToCart('${id}')">ADD TO BAG</button>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('cart-count').innerText = cart.length;
+        }
+
+        window.addToCart = (id) => {
+            const p = products.find(x => x[0] === id)[1];
+            cart.push({id, ...p});
+            localStorage.setItem('p_cart', JSON.stringify(cart));
+            document.getElementById('cart-count').innerText = cart.length;
+            showToast("Added to bag!");
+        };
+
+        function renderCart() {
+            const box = document.getElementById('cart-items');
+            box.innerHTML = cart.length ? '' : '<h4 class="text-center py-5">Your bag is empty.</h4>';
+            let total = 0;
+            cart.forEach((item, i) => {
+                total += parseFloat(item.price);
+                box.innerHTML += `
+                <div class="card border-0 shadow-sm p-3 mb-3 rounded-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="${item.image}" width="60" height="60" class="rounded-3 object-fit-cover">
+                        <div class="flex-grow-1"><h6 class="fw-800 m-0">${item.title}</h6><div class="text-muted">${currency} ${item.price}</div></div>
+                        <i class="fa-solid fa-trash text-danger cursor-pointer" onclick="remCart(${i})"></i>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('gtotal').innerText = currency + total;
+        }
+
+        window.remCart = (i) => {
+            cart.splice(i, 1);
+            localStorage.setItem('p_cart', JSON.stringify(cart));
+            renderCart();
+            document.getElementById('cart-count').innerText = cart.length;
+        };
+
+        window.checkOut = () => {
+            if(!cart.length) return;
+            if(!user) return switchPage('auth');
+            new bootstrap.Modal(document.getElementById('coModal')).show();
+        };
+
+        window.submitOrder = () => {
+            const n = document.getElementById('co-name').value;
+            const p = document.getElementById('co-phone').value;
+            const a = document.getElementById('co-addr').value;
+            if(!n || !p || !a) return showToast("Fill all details!");
+
+            const order = {
+                oid: 'ORD-' + Math.floor(1000 + Math.random() * 9000),
+                userId: user.id, name: n, phone: p, address: a,
+                items: cart, total: document.getElementById('gtotal').innerText,
+                status: 'Pending', date: new Date().toLocaleString()
+            };
+            push(ref(db, 'orders'), order).then(() => {
+                cart = []; localStorage.removeItem('p_cart');
+                showToast("Order Placed Successfully!");
+                setTimeout(() => location.reload(), 2000);
+            });
+        };
+
+        window.trackOrders = () => {
+            onValue(ref(db, 'orders'), (snap) => {
+                const box = document.getElementById('tracking-list');
+                box.innerHTML = '';
+                const orders = snap.val();
+                if(!orders) return;
+                Object.values(orders).reverse().forEach(o => {
+                    if(o.userId === user.id) {
+                        box.innerHTML += `
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm p-4 rounded-4">
+                                <div class="d-flex justify-content-between"><span class="fw-800">#${o.oid}</span><span class="badge bg-dark">${o.status}</span></div>
+                                <div class="fs-5 fw-800 mt-2 text-warning">${o.total}</div>
+                                <div class="small text-muted mt-1">${o.date}</div>
+                            </div>
+                        </div>`;
+                    }
+                });
+            });
+        };
+
+        window.loginUser = () => {
+            const e = document.getElementById('l-email').value;
+            const p = document.getElementById('l-pass').value;
+            onValue(ref(db, 'users'), (snap) => {
+                const users = snap.val();
+                let found = null;
+                for(let id in users) if(users[id].email === e && users[id].pass === p) found = users[id];
+                if(found) {
+                    user = found;
+                    localStorage.setItem('p_user', JSON.stringify(found));
+                    showToast("Login Successful!");
+                    location.reload();
+                } else showToast("Wrong details!");
+            }, {onlyOnce: true});
+        };
+
+        window.signupUser = () => {
+            const n = document.getElementById('r-name').value;
+            const e = document.getElementById('r-email').value;
+            const p = document.getElementById('r-pass').value;
+            if(!n || !e || !p) return showToast("Fill all fields!");
+            const uid = Date.now();
+            set(ref(db, `users/${uid}`), {id: uid, name: n, email: e, pass: p}).then(() => {
+                showToast("Account Created!");
+                toggleAuth(true);
+            });
+        };
+
+        window.logoutUser = () => { localStorage.removeItem('p_user'); location.reload(); };
+        window.handleProfileNav = () => { if(user) switchPage('profile'); else switchPage('auth'); };
+        window.toggleAuth = (st) => {
+            document.getElementById('login-box').style.display = st ? 'block' : 'none';
+            document.getElementById('signup-box').style.display = st ? 'none' : 'block';
+        };
+        window.filterBy = (cat) => {
+            const res = products.filter(p => p[1].category === cat);
+            renderGrid(res);
+            document.getElementById('grid-title').innerText = cat.toUpperCase() + " COLLECTION";
+        };
+
+    </script>
+</body>
+</html>
